@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 import matplotlib.pyplot as plt
-
+import tkinter as tk
 
 class CVPAnalysis(object):
     def __init__(self, revenue, variable, fixed):
@@ -46,47 +46,49 @@ def input_elements():
     fixed = int(input('fixed : '))
     return revenue, variable, fixed
 
-keys = ['VCR', 'BEP', 'MARGINAL_PROFIT', 'MARGINAL_PROFIT_RATIO', 'BEP_RATIO', \
-        'MARGIN_OF_SAFETY_RATIO']
-RES = []
-ELEMENTS = input_elements()
-revenue, variable, fixed = ELEMENTS
+def main():
+    keys = ['VCR', 'BEP', 'MARGINAL_PROFIT', 'MARGINAL_PROFIT_RATIO', 'BEP_RATIO', \
+            'MARGIN_OF_SAFETY_RATIO']
+    res = []
+    elements = input_elements()
+    revenue, variable, fixed = elements
 
 
-CVP = CVPAnalysis(revenue, variable, fixed)
-RES.append(CVP.calc_vcr())
-RES.append(CVP.calc_bep())
-RES.append(CVP.calc_marginal_profit())
-RES.append(CVP.calc_marginal_profit_ratio())
-RES.append(CVP.calc_bep_ratio())
-RES.append(CVP.calc_margin_of_safety_ratio())
+    cvp = CVPAnalysis(revenue, variable, fixed) 
+    res.append(cvp.calc_vcr())
+    res.append(cvp.calc_bep())
+    res.append(cvp.calc_marginal_profit())
+    res.append(cvp.calc_marginal_profit_ratio())
+    res.append(cvp.calc_bep_ratio())
+    res.append(cvp.calc_margin_of_safety_ratio())
 
-#making format
-WIDTH = 50
-NUMBER_WIDTH = 10
-ITEM_WIDTH = 37
+    #setting format
+    width = 50
+    number_width = 10
+    item_width = 37
 
-FMT = '{{:{}}}{{:>{}.2f}}'.format(ITEM_WIDTH, NUMBER_WIDTH)
+    fmt = '{{:{}}}{{:>{}.2f}}'.format(item_width, number_width)
 
-#show results
-print('=' * WIDTH)
+    #show results
+    print('=' * width)
+    for i in range(len(res)):
+        print(fmt.format(keys[i], res[i]))
+    print('=' * width)
 
-for i in range(len(RES)):
-    print(FMT.format(keys[i], RES[i]))
+    #show graphs
+    revenueline = [0, revenue]
+    variableline = [fixed, fixed + variable]
+    fixedline = [fixed, fixed]
 
-print('=' * WIDTH)
+    plt.plot(revenueline)
+    plt.plot(variableline)
+    plt.plot(fixedline)
 
-#show graph
-rLine = [0, revenue]
-vLine = [fixed, fixed + variable]
-fLine = [fixed, fixed]
+    #delete axes
+    plt.xticks([])
+    plt.yticks([])
 
-plt.plot(rLine)
-plt.plot(vLine)
-plt.plot(fLine)
+    plt.show()
+    
 
-#delete axes
-plt.xticks([])
-plt.yticks([])
-
-plt.show()
+if __name__ == '__main__': main()
